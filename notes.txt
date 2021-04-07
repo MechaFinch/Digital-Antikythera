@@ -1,0 +1,127 @@
+IP
+- required by ST0 and ST2
+  - ST0 always increments unless stalled
+  - ST2 can fire LD without stalling
+- EN = !_stall
+- LD = ST2
+
+RR
+- Controlled by ST1 for return
+  - if you want more depth save RR somewhere
+  - Need JSR, RET, STR instructions
+
+asdf
+
+
+
+
+
+Instructions
+memory address m = const, x
+<ma> is m as address, use []
+<mv> is m as value
+
+NOP (0x00)
+
+TAX
+TXA
+
+STA <ma>
+STX <ma>
+STR <ma>
+
+LDA <ma>
+LDA <mv> (constant?)
+LDX <ma>
+LDX <mv> (cosntant?)
+LDR <ma>
+
+JSR
+RET
+
+ADD <a += mv, x += mv>
+ADD <a += ma, ma += a>
+SUB <a -= mv, x -= mv>
+SUB <a -= ma, ma -= a>
+
+INC
+DEC
+INX
+DEX
+
+CMP <mv>
+CMX <mv>
+
+JMP <mv>
+Jcc <mv>
+
+Aliases
+CLC -> CMX X
+
+Conditions
+C  carry
+NC not carry
+E  equal
+NE not equal
+G  greater than
+GE greater than or equal to
+L  less than
+LE less than or equal to
+
+
+
+example programs with output peripheral at 0x10
+Hello World
+str db "Hello, World!", 0x00
+
+main:
+	LDX str
+loop:
+	LDA [x]
+	CMP 0x00
+	JE end
+	STA [0x10]	; out
+	INX
+	JMP loop
+end:
+	JMP end
+
+
+
+
+Primes
+a
+
+
+
+
+Fibonacci
+A	n
+0x00	n-2
+0x01	n-1
+
+main:
+	LDA 0x01
+	LDX 0x00
+	STA [0x00]	; init n-2
+loop:
+	STX [0x01]	; move n-1 to n-2
+	STA [0x01]	; move n to n-1
+	ADD A, [0x00]	; add n-2
+	LDX [0x00]	; did we overflow, also setup x
+	CMP X
+	JL  end
+	STA [0x10]	; out n
+	JMP loop
+end:
+	JMP end
+	
+
+
+
+
+
+
+
+
+
