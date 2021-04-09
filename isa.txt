@@ -1,0 +1,146 @@
+
+
+ here is another isa file
+ it defines the isa
+ who would have guessed
+ 
+ ma = memory address, can be X or a constant
+ mv = value can be X or a constant
+ A = Accumulator
+ X = Index Register
+ R = Return Address
+ C = constant
+ 
+ Format
+ --------------------
+ PRIMARY MNEMONIC
+ <OPCODE> <ARGUMENTS>
+ 
+ Description
+ 
+ Microcode
+ 
+ --------------------
+ NOP
+ 0x00
+ 
+ Does nothing
+ 
+ microcode
+ 
+ --------------------
+ TAX
+ 0x??
+ 
+ Copies A to X
+ 
+ microcode
+ 
+ --------------------
+ TXA
+ 0x??
+ 
+ Copies X to A
+ Alias of LDA X
+ 
+ --------------------
+ STA
+   STA [C]: 0x?? const
+   STA [X]: 0x??
+ 
+ Copies A to memory at the given address
+ 
+ --------------------
+ STX
+   STX [C]: 0x?? const
+   STX [X]: 0x??
+ 
+ Copies X to memory at the given address
+ 
+ --------------------
+ STR
+   STR [C]: 0x?? const
+   STR [X]: 0x??
+ 
+ Copies R to memory at the given address
+ 
+ --------------------
+ LDA
+   LDA C:   0x?? const
+   LDA X:   0x??
+   LDA [C]: 0x?? const
+   LDA [X]: 0x??
+ 
+ Copies the given value to A
+ 
+ --------------------
+ LDX
+   LDX C:   0x?? const
+   LDX X:   0x??
+   LDX [C]: 0x?? const
+   LDX [X]: 0x??
+ 
+ Copies the given value to X
+ 
+ --------------------
+ LDR
+   LDR [C]: 0x?? const
+   LDR [X]: 0x??
+ 
+ Copies the given value to R
+ 
+ --------------------
+ ADD
+   ADD A, C:   0x?? const
+   ADD A, X:   0x??
+   ADD A, [C]: 0x?? const
+   ADD A, [X]: 0x??
+   ADD X, C:   0x?? const
+   ADD X, X:   0x??
+   ADD [C], A: 0x?? const
+   ADD [X], A: 0x??
+ 
+ Adds the second argument to the first, storing it in the first
+ Includes the carry flag
+ 
+ --------------------
+ SUB
+   SUB A, C:   0x?? const
+   SUB A, X:   0x??
+   SUB A, [C]: 0x?? const
+   SUB A, [X]: 0x??
+   SUB X, C:   0x?? const
+   SUB X, X:   0x??
+   SUB [C], A: 0x?? const
+   SUB [X], A: 0x??
+ 
+ Subtracts the second argument from the first, storing it in the first
+ Includes the carry flag
+ 
+ --------------------
+ INC
+   INC: 0x??
+   INX: 0x??
+ 
+ Increments the given register
+ 
+ --------------------
+ DEC
+   DEC: 0x??
+   DEX: 0x??
+ 
+ Decrements the given register
+ 
+ --------------------
+ 
+
+
+
+
+
+
+
+
+
+
+

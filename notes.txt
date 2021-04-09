@@ -24,20 +24,16 @@ memory address m = const, x
 NOP (0x00)
 
 TAX
-TXA
 
 STA <ma>
 STX <ma>
 STR <ma>
 
 LDA <ma>
-LDA <mv> (constant?)
+LDA <mv>
 LDX <ma>
-LDX <mv> (cosntant?)
+LDX <mv>
 LDR <ma>
-
-JSR
-RET
 
 ADD <a += mv, x += mv>
 ADD <a += ma, ma += a>
@@ -45,18 +41,22 @@ SUB <a -= mv, x -= mv>
 SUB <a -= ma, ma -= a>
 
 INC
-DEC
 INX
+DEC
 DEX
-
-CMP <mv>
-CMX <mv>
 
 JMP <mv>
 Jcc <mv>
 
+CMP <mv>
+CMX <mv>
+
+JSR
+RET
+
 Aliases
 CLC -> CMX X
+TXA -> LDA X
 
 Conditions
 C  carry
