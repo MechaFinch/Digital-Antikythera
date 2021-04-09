@@ -51,7 +51,7 @@ Jcc <mv>
 CMP <mv>
 CMX <mv>
 
-JSR
+JSR <mv>
 RET
 
 Aliases

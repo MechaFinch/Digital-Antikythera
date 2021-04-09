@@ -22,7 +22,7 @@
  
  --------------------
  NOP
- 0x00
+   NOP: 0x00
  
  Does nothing
  
@@ -30,7 +30,7 @@
  
  --------------------
  TAX
- 0x??
+   TAX: 0x??
  
  Copies A to X
  
@@ -38,7 +38,7 @@
  
  --------------------
  TXA
- 0x??
+   TXA: 0x??
  
  Copies X to A
  Alias of LDA X
@@ -122,17 +122,79 @@
    INC: 0x??
    INX: 0x??
  
- Increments the given register
+ Increments the A or X register
  
  --------------------
  DEC
    DEC: 0x??
    DEX: 0x??
  
- Decrements the given register
+ Decrements the A or X register
  
  --------------------
+ JMP
+   JMP C: 0x?? const
+   JMP X: 0x??
  
+ Jumps to the given address
+ 
+ --------------------
+ Jcc
+   JC C:  0x?? const
+   JC X:  0x??
+   JNC C: 0x?? const
+   JNC X: 0x??
+   JE C:  0x?? const
+   JE X:  0x??
+   JNE C: 0x?? const
+   JNE X: 0x??
+   JZ C:  0x?? const
+   JZ X:  0x??
+   JNZ C: 0x?? const
+   JNZ X: 0x??
+   JG C:  0x?? const
+   JG X:  0x??
+   JGE C: 0x?? const
+   JGE X: 0x??
+   JL C:  0x?? const
+   JL X:  0x??
+   JLE C: 0x?? const
+   JLE X: 0x??
+ 
+ Jumps to the given value if the given condition is true
+ 
+ --------------------
+ CMP
+   CMP C: 0x?? const
+   CMP X: 0x??
+   CMX C: 0x?? const
+   CMX X: 0x??
+ 
+ Compares A or X with a constant or X by subtracting
+ the former from the latter without storing the result
+ 
+ --------------------
+ CLC
+   CLC: 0x??
+ 
+ Clears carry, sign, and overflow flags
+ Sets zero flag
+ Alias for CMX X
+ 
+ --------------------
+ JSR
+   JSR C: 0x?? const
+   JSR X: 0x??
+ 
+ Jumps to subroutine at the given address
+ Sets R to the address of the next instruction
+ 
+ --------------------
+ RET
+   RET: 0x??
+ 
+ Return from subroutine
+ Jumps to the address held in R
 
 
 
