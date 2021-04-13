@@ -101,7 +101,22 @@
    ADD [X], A: 0x??
  
  Adds the second argument to the first, storing it in the first
- Includes the carry flag
+ Affects flags.
+ 
+ --------------------
+ ADC
+   ADC A, C:   0x?? const
+   ADC A, X:   0x??
+   ADC A, [C]: 0x?? const
+   ADC A, [X]: 0x??
+   ADC X, C:   0x?? const
+   ADC X, X:   0x??
+   ADC [C], A: 0x?? const
+   ADC [X], A: 0x??
+ 
+ Adds the second argument to the first and the carry flag, storing 
+ it in the first.
+ Affects flags.
  
  --------------------
  SUB
@@ -114,8 +129,47 @@
    SUB [C], A: 0x?? const
    SUB [X], A: 0x??
  
- Subtracts the second argument from the first, storing it in the first
- Includes the carry flag
+ Subtracts the second argument from the first, storing it in the first.
+ Affects flags.
+ 
+ --------------------
+ SBC
+   SBC A, C:   0x?? const
+   SBC A, X:   0x??
+   SBC A, [C]: 0x?? const
+   SBC A, [X]: 0x??
+   SBC X, C:   0x?? const
+   SBC X, X:   0x??
+   SBC [C], A: 0x?? const
+   SBC [X], A: 0x??
+ 
+ Subtracts the second argument and the carry flag from the first,
+ storing it in the first.
+ Affects flags.
+ 
+ --------------------
+ AND
+   AND A, C: 0x?? const
+   AND A, X: 0x??
+ 
+ Performs a logical AND between A and the argument, storing to A.
+ Does not affect flags.
+ 
+ --------------------
+ OR
+   OR A, C: 0x?? const
+   OR A, X: 0x??
+ 
+ Performs a logical OR between A and the argument, storing to A.
+ Does not affect flags.
+ 
+ --------------------
+ XOR
+   XOR A, C: 0x?? const
+   XOR A, X: 0x??
+ 
+ Performs a logical XOR between A and the argument, storing to A.
+ Does not affect flags.
  
  --------------------
  INC
