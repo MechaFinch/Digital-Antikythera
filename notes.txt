@@ -21,55 +21,55 @@ AND
 
 
 Instructions
-memory address m = const, x
-<ma> is m as address, use []
-<mv> is m as value
+Registers A, X, R
+Constant C
 
 NOP (0x00)
 
-TAX
+MOV <a, x, r>, <x, c, [x], [c]>
+MOV <[x], [c]>, <a, x, r, c>
+MOV x, a
 
-STA <ma>
-STX <ma>
-STR <ma>
+ADD a, <x, c, [x], [c]>
+ADD x, <x, c>
+ADD <[x], [c]>, a
 
-LDA <ma>
-LDA <mv>
-LDX <ma>
-LDX <mv>
-LDR <ma>
+ADC a, <x, c, [x], [c]>
+ADC x, <x, c>
+ADC <[x], [c]>, a
 
-ADD <a += mv, x += mv>
-ADD <a += ma, ma += a>
-ADC <a += mv, x += mv>
-ADC <a += ma, ma += a>
+SUB a, <x, c, [x], [c]>
+SUB x, <x, c>
+SUB <[x], [c]>, a
 
-SUB <a -= mv, x -= mv>
-SUB <a -= ma, ma -= a>
-SBC <a -= mv, x -= mv>
-SBC <a -= ma, ma -= a>
+SBC a, <x, c, [x], [c]>
+SBC x, <x, c>
+SBC <[x], [c]>, a
 
-AND <a = a & mv>
-OR  <a = a | mv>
-XOR <a = a ^ mv>
+AND a, <x, c, [x], [c]>
+AND x, <x, c>
 
-INC
-INX
-DEC
-DEX
+OR  a, <x, c, [x], [c]>
+OR  x, <x, c>
 
-JMP <mv>
-Jcc <mv>
+XOR a, <x, c, [x], [c]>
+XOR x, <x, c>
 
-CMP <mv>
-CMX <mv>
+INC <a, x>
+DEC <a, x>
 
-JSR <mv>
+JMP <x, c>
+Jcc <x, c>
+
+CMP <a, x>, <x, c>
+
+JSR <x, c>
 RET
 
 Aliases
-CLC -> CMX X
-TXA -> LDA X
+CLC -> CMP X, X
+SWP -> MOV A, X
+       MOV X, A
 
 Conditions
 C  carry
@@ -80,171 +80,6 @@ G  greater than
 GE greater than or equal to
 L  less than
 LE less than or equal to
-
-
-
-example programs
-- ASCII output peripheral at 0x10
-- Standard return address store at 0x0F
-Hello World
-
-str db "Hello, World!", 0x00
-
-main:
-	LDX str
-loop:
-	LDA [x]
-	CMP 0x00
-	JE end
-	STA [0x10]	; out
-	INX
-	JMP loop
-end:
-	JMP end
-
-
-	
-	
-
-
-Primes (naive)
-Comparisons are signed so the range is 0-127 (0x00-0x7F)
-
-psuedo code:
-	print(2);
-	outer:
-	for(int n = 3; n > 0; n += 2) {
-		for(int i = 3; 2 * i < n; i += 2) {
-			if(n % i == 0) {
-				continue outer;
-			}
-		}
-		
-		print(n);
-	}
-
-
-0x00	n
-0x01	temp
-0x0E	print_hex original
-0x0F	return address
-
-str	db "Done.", 0x00
-
-main:
-	LDA 0x02	; special case 2
-	JSR print_hex
-	LDA 0x03	; otherwise only odd are prime
-outer_loop:
-	LDX 0x03	; init for inner
-	
-inner_loop:
-	STX [0x01]	; save i
-	ADD X, X	; check 2i < n
-	CMP X
-	JL  inner_loop_end	; n < 2i, break
-	STA [0x00]	; save n
-	LDX [0x01]	; recover i
-mod_loop:
-	SUB A, X	; calculate n%i
-	CMP X		; check n >= x
-	JGE mod_loop
-	CMP 0x00
-	JZ outer_loop_continue
-	LDA [0x00]	; not zero, continue inner
-	ADD X, 0x02
-	JMP inner_loop
-	
-inner_loop_end:
-	JSR print_hex
-
-outer_loop_continue:
-	LDA [0x00]	; n += 2, continue if n > 0
-	ADD A, 0x02
-	CMP 0x00
-	JG outer_loop
-
-	LDX str		; otherwise print 'done' and end
-print_str:
-	LDA [x]
-	CMP 0x00
-	JE end
-	STA [0x10]
-	INX
-	JMP print_str
-end:
-	JMP end
-
-print_hex:		; prints A in hex with a newline
-	STA [0x0E]	; save original
-	AND A, 0xF0	; upper half
-	TAX		; rotate left to emulate 4x shr
-	ADD X, X
-	ADC X, X
-	ADC X, X
-	ADC X, X
-	ADC X, X
-	TXA
-	STR [0x0F]	; print upper
-	JSR print_hex_char
-	LDA [0x0E]	; load and print lower
-	AND A, 0x0F
-	JSR print_hex_char
-	LDA '\n'	; newline & return
-	STA [0x10]
-	LDR
-	RET
-
-print_hex_char:
-	CMP 0x0A
-	JGE phc_high
-	ADD A, 0x30
-	STA [0x10]
-	RET
-phc_high:
-	ADD A, 0x41
-	STA [0x10]
-	RET
-
-
-
-
-	
-	
-Primes (optimized)
-A	n
-X	divisor
-0x00	ceil(sqrt(n))
-
-
-
-
-
-Fibonacci (binary output)
-A	n
-0x00	n-2
-0x01	n-1
-
-main:
-	LDA 0x01
-	LDX 0x00
-	STA [0x00]	; init n-2
-loop:
-	STX [0x01]	; move n-1 to n-2
-	STA [0x01]	; move n to n-1
-	ADD A, [0x00]	; add n-2
-	LDX [0x00]	; did we overflow, also setup x
-	CMP X
-	JL  end
-	STA [0x10]	; out n
-	JMP loop
-end:
-	JMP end
-	
-
-
-
-
 
 
 
