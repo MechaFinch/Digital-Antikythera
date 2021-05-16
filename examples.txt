@@ -1,154 +1,154 @@
-example programs
-- ASCII output peripheral at 0x10
-- Standard return address store at 0x0F
-Hello World
-
-str db "Hello, World!", 0x00
-
-main:
-	MOV X, str
-loop:
-	MOV A, [X]
-	CMP A, 0x00
-	JE  end
-	MOV [0x10], A	; out
-	INC X
-	JMP loop
-end:
+ example programs
+ - ASCII output peripheral at 0x10
+ - Standard return address store at 0x0F
+ Hello World
+ 
+ str db "Hello, World!", 0x00
+ 
+ main:
+ 	MOV X, str
+ loop:
+ 	MOV A, [X]
+ 	CMP A, 0x00
+ 	JE  end
+ 	MOV [0x10], A	; out
+ 	INC X
+ 	JMP loop
+ end:
+ 	JMP end
+ 
+ 
+ 	
+ 	
+ 
+ 
+ Primes (naive)
+ Comparisons are signed so the range is 0-127 (0x00-0x7F)
+ 
+ psuedo code:
+ 	print(2);
+ 	outer:
+ 	for(int n = 3; n > 0; n += 2) {
+ 		for(int i = 3; 2 * i < n; i += 2) {
+ 			if(n % i == 0) {
+ 				continue outer;
+ 			}
+ 		}
+ 		
+ 		print(n);
+ 	}
+ 
+ 
+ 0x00	n
+ 0x01	temp
+ 0x0E	print_hex original
+ 0x0F	return address
+ 
+ str	db "Done.", 0x00
+ 
+ main:
+ 	MOV A, 0x02	; special case 2
+ 	JSR print_hex
+ 	MOV A, 0x03	; other than 2 primes are odd
+ outer_loop:
+ 	MOV X, 0x03	; init for inner
+ 	
+ inner_loop:
+ 	MOV [0x01], X	; save i
+ 	ADD X, X	; check 2i < n
+ 	CMP A, X
+ 	JL  inner_loop_end	; n < 2i, break
+ 	MOV [0x00], A	; save n
+ 	MOV X, [0x01]	; recover i
+ mod_loop:
+ 	SUB A, X	; calculate n%i
+ 	CMP A, X	; check n >= x
+ 	JGE mod_loop
+ 	CMP A, 0x00
+ 	JZ  outer_loop_continue
+ 	MOV A, [0x00]	; nonzero, continue inner
+ 	ADD X, 0x02
+ 	JMP inner_loop
+ 	
+ inner_loop_end:
+ 	JSR print_hex
+ 
+ outer_loop_continue:
+ 	MOV A, [0x00]	; n += 2, continue if n > 0
+ 	ADD A, 0x02
+ 	CMP A, 0x00
+ 	JG  outer_loop
+ 
+ 	MOV X, str	; otherwise print 'done' and end
+ print_str:
+ 	MOV A, [X]
+ 	CMP A, 0x00
+ 	JE  end
+ 	MOV [0x10], A
+ 	INC X
+ 	JMP print_str
+  end:
 	JMP end
-
-
-	
-	
-
-
-Primes (naive)
-Comparisons are signed so the range is 0-127 (0x00-0x7F)
-
-psuedo code:
-	print(2);
-	outer:
-	for(int n = 3; n > 0; n += 2) {
-		for(int i = 3; 2 * i < n; i += 2) {
-			if(n % i == 0) {
-				continue outer;
-			}
-		}
-		
-		print(n);
-	}
-
-
-0x00	n
-0x01	temp
-0x0E	print_hex original
-0x0F	return address
-
-str	db "Done.", 0x00
-
-main:
-	MOV A, 0x02	; special case 2
-	JSR print_hex
-	MOV A, 0x03	; other than 2 primes are odd
-outer_loop:
-	MOV X, 0x03	; init for inner
-	
-inner_loop:
-	MOV [0x01], X	; save i
-	ADD X, X	; check 2i < n
-	CMP A, X
-	JL  inner_loop_end	; n < 2i, break
-	MOV [0x00], A	; save n
-	MOV X, [0x01]	; recover i
-mod_loop:
-	SUB A, X	; calculate n%i
-	CMP A, X	; check n >= x
-	JGE mod_loop
-	CMP A, 0x00
-	JZ  outer_loop_continue
-	MOV A, [0x00]	; nonzero, continue inner
-	ADD X, 0x02
-	JMP inner_loop
-	
-inner_loop_end:
-	JSR print_hex
-
-outer_loop_continue:
-	MOV A, [0x00]	; n += 2, continue if n > 0
-	ADD A, 0x02
-	CMP A, 0x00
-	JG  outer_loop
-
-	MOV X, str	; otherwise print 'done' and end
-print_str:
-	MOV A, [X]
-	CMP A, 0x00
-	JE  end
-	MOV [0x10], A
-	INC X
-	JMP print_str
-end:
-	JMP end
-
-print_hex:		; prints A in hex with a newline
-	MOV X, A
-	AND X, 0xF0	; upper half
-	ADD X, X	; rotate left to emulate rightshift
-	ADC X, X
-	ADC X, X
-	ADC X, X
-	ADC X, X
-	MOV [0x0F], R	; print upper
-	JSR print_hex_char
-	MOV X, A	; print lower
-	AND X, 0x0F
-	JSR print_hex_char
-	MOV [0x10], '\n'; print newline
-	MOV R, [0x0F]
-	RET
-
-print_hex_char:
-	CMP X, 0x0A
-	JGE phc_high
-	ADD X, 0x30
-	MOV [0x10], X
-	RET
-phc_high:
-	ADD X, 0x41
-	MOV [0x10], X
-	RET
-
-
-
-
-	
-	
-Primes (optimized)
-A	n
-X	divisor
-0x00	ceil(sqrt(n))
-
-
-
-
-
-Fibonacci (binary output)
-A	n
-0x00	n-2
-0x01	n-1
-
-main:
-	MOV A, 0x01
-	MOV X, 0x00
-loop:
-	MOV [0x00], X	; move n-1 to n-2
-	MOV [0x01], A	; move n to n-1
-	ADD A, [0x00]	; add n-2
-	MOV X, [0x01]	; check overflow, setup x
-	CMP A, X
-	JL  end
-	MOV [0x10], A	; output n
-	JMP loop
-end:
-	JMP end
-	
+ 
+ print_hex:		; prints A in hex with a newline
+ 	MOV X, A
+ 	AND X, 0xF0	; upper half
+ 	ADD X, X	; rotate left to emulate rightshift
+ 	ADC X, X
+ 	ADC X, X
+ 	ADC X, X
+ 	ADC X, X
+ 	MOV [0x0F], R	; print upper
+ 	JSR print_hex_char
+ 	MOV X, A	; print lower
+ 	AND X, 0x0F
+ 	JSR print_hex_char
+ 	MOV [0x10], '\n'; print newline
+ 	MOV R, [0x0F]
+ 	RET
+ 
+ print_hex_char:
+ 	CMP X, 0x0A
+ 	JGE phc_high
+ 	ADD X, 0x30
+ 	MOV [0x10], X
+ 	RET
+ phc_high:
+ 	ADD X, 0x41
+ 	MOV [0x10], X
+ 	RET
+ 
+ 
+ 
+ 
+ 	
+ 	
+ Primes (optimized)
+ A	n
+ X	divisor
+ 0x00	ceil(sqrt(n))
+ 
+  
+ 
+ 
+ 
+ Fibonacci (binary output)
+ A	n
+ 0x00	n-2
+ 0x01	n-1
+ 
+ main:
+ 	MOV A, 0x01
+ 	MOV X, 0x00
+ loop:
+ 	MOV [0x00], X	; move n-1 to n-2
+ 	MOV [0x01], A	; move n to n-1
+ 	ADD A, [0x00]	; add n-2
+ 	MOV X, [0x01]	; check overflow, setup x
+ 	CMP A, X
+ 	JL  end
+ 	MOV [0x10], A	; output n
+ 	JMP loop
+ end:
+ 	JMP end
+ 	

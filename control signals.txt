@@ -1,0 +1,153 @@
+
+
+ Control Signals for each instruction
+ 
+ Bit patterns match the arrangement in the diagram
+ 
+ General assignment
+ 
+  ST0                ST1           ST2
+ |---------------|  |----------|  |----------|
+ xxx xx xx x xx xx  xx xx xx xxx  xxxx xx xxxx
+ 
+ 
+ Sub Instructions
+ These instructions list all stages on one line without 
+ redundent empty stages
+ 
+ NOP
+ 100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx x000
+ 
+ Read Constant
+ 101 00 xx 0 01 10  xx xx xx xxx  xxx0 xx x000
+ 
+ Read [X]
+ 001 00 xx 0 01 01  xx xx xx xxx  xxx0 xx x000
+ 
+ Read [C]
+ 001 00 xx 0 01 11  xx xx xx xxx  xxx0 xx x000
+ 
+ Delay Write [X]
+ 001 10 10 0 00 xx  xx xx xx xxx  xxx0 xx x000
+ 
+ Delay Write [C]
+ 001 11 10 0 00 xx  xx xx xx xxx  xxx0 xx x000
+ 
+ Write [X]
+ 001 00 xx 0 10 01  xx xx xx xxx  xxx0 xx x000
+ 
+ Write [C]
+ 001 00 xx 0 10 11  xx xx xx xxx  xxx0 xx x000
+ 
+ 
+ Main Instrcutions
+ These instructions are defined via their full effect
+ on the control signals, including their issued Sub
+ Instructions. When a Sub Instruction is issued, it
+ is listed on the right side and its first stage
+ appears as the first stage of the next line.
+ 
+ MOV A, X
+ 100 xx xx 0 01 10 
+                    xx xx 01 xx1 
+                                  xxx0 xx 0100
+ 
+ 
+ MOV A, constant
+ 001 01 0x 0 00 xx                             < Read Constant
+ 101 00 xx 0 01 10  xx xx 11 xx1               < NOP
+ 100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx 0100
+                    xx xx xx xxx  xxx0 xx x000
+                                  xxx0 xx x000
+ 
+ 
+ MOV A, [X]
+ 001 10 0x 0 00 xx                             < Read [X]
+ 001 00 xx 0 01 01  xx xx 11 xx1               < NOP
+ 100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx 0100
+                    xx xx xx xxx  xxx0 xx x000
+                                  xxx0 xx x000
+ 
+ 
+ MOV A, [constant]
+ 101 11 0x 1 01 10                             < Read [C]
+ 001 00 xx 0 01 11  xx xx 11 xx1               < NOP
+ 100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx 0100
+                    xx xx xx xxx  xxx0 xx x000
+                                  xxx0 xx x000
+ 
+ 
+ 
+ MOV X, constant
+ 001 01 0x 0 00 xx                             < Read Constant
+ 101 00 xx 0 01 10  xx xx 11 xx1               < NOP
+ 100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx 0010
+                    xx xx xx xxx  xxx0 xx x000
+                                  xxx0 xx x000
+ 
+ 
+ MOV X, [X]
+ 001 10 0x 0 00 xx                             < Read [X]
+ 001 00 xx 0 01 01  xx xx 11 xx1               < NOP
+ 100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx 0010
+                    xx xx xx xxx  xxx0 xx x000
+                                  xxx0 xx x000
+ 
+ 
+ MOV X, [constant]
+ 101 11 0x 1 01 10                             < Read [C]
+ 001 00 xx 0 01 11  xx xx 11 xx1               < NOP
+ 100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx 0010
+                    xx xx xx xxx  xxx0 xx x000
+                                  xxx0 xx x000
+ 
+ 
+ 
+ MOV R, X
+ 100 xx xx 0 01 10
+                    xx xx 01 xx1
+                                  xxx0 xx 0001
+ 
+ 
+ MOV R, constant
+ 001 01 0x 0 00 xx                             < Read Constant
+ 101 00 xx 0 01 10  xx xx 11 xx1               < NOP
+ 100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx 0001
+                    xx xx xx xxx  xxx0 xx x000
+                                  xxx0 xx x000
+ 
+ 
+ MOV R, [X]
+ 001 10 0x 0 00 xx                             < Read [X]
+ 001 00 xx 0 01 01  xx xx 11 xx1               < NOP
+ 100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx 0001
+                    xx xx xx xxx  xxx0 xx x000
+                                  xxx0 xx x000
+ 
+ 
+ MOV R, [constant]
+ 101 11 0x 1 01 10                             < Read [C]
+ 001 00 xx 0 01 11  xx xx 11 xx1               < NOP
+ 100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx 0001
+                    xx xx xx xxx  xxx0 xx x000
+                                  xxx0 xx x000
+ 
+ 
+ 
+ MOV [X], A
+ 001 10 11 0 00 xx                             < DWrite [X]
+ 001 10 10 0 00 xx  xx xx 00 xx1               < Write [X]
+ 001 00 xx 0 10 01  xx xx xx xxx  xxx0 xx 0000 < NOP
+ 100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx x000
+                    xx xx xx xxx  xxx0 xx x000
+                                  xxx0 xx x000
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

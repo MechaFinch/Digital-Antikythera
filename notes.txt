@@ -1,87 +1,90 @@
-IP
-- required by ST0 and ST2
-  - ST0 always increments unless stalled
-  - ST2 can fire LD without stalling
-- EN = !_stall
-- LD = ST2
-
-RR
-- Controlled by ST1 for return
-  - if you want more depth save RR somewhere
-  - Need JSR, RET, STR instructions
-
-asdf
-
-
-AND
-00001111
-01011101
-
-00001101
-
-
-Instructions
-Registers A, X, R
-Constant C
-
-NOP (0x00)
-
-MOV <a, x, r>, <x, c, [x], [c]>
-MOV <[x], [c]>, <a, x, r, c>
-MOV x, a
-
-ADD a, <x, c, [x], [c]>
-ADD x, <x, c>
-ADD <[x], [c]>, a
-
-ADC a, <x, c, [x], [c]>
-ADC x, <x, c>
-ADC <[x], [c]>, a
-
-SUB a, <x, c, [x], [c]>
-SUB x, <x, c>
-SUB <[x], [c]>, a
-
-SBC a, <x, c, [x], [c]>
-SBC x, <x, c>
-SBC <[x], [c]>, a
-
-AND a, <x, c, [x], [c]>
-AND x, <x, c>
-
-OR  a, <x, c, [x], [c]>
-OR  x, <x, c>
-
-XOR a, <x, c, [x], [c]>
-XOR x, <x, c>
-
-INC <a, x>
-DEC <a, x>
-
-JMP <x, c>
-Jcc <x, c>
-
-CMP <a, x>, <x, c>
-
-JSR <x, c>
-RET
-
-Aliases
-CLC -> CMP X, X
-SWP -> MOV A, X
-       MOV X, A
-
-Conditions
-C  carry
-NC not carry
-E  equal
-NE not equal
-G  greater than
-GE greater than or equal to
-L  less than
-LE less than or equal to
-
-
-
-
-
+ IP
+ - required by ST0 and ST2
+   - ST0 always increments unless stalled
+   - ST2 can fire LD without stalling
+ - EN = !_stall
+ - LD = ST2
+ 
+ RR
+ - Controlled by ST1 for return
+   - if you want more depth save RR somewhere
+   - Need JSR, RET, STR instructions
+ 
+ asdf
+ 
+ 
+ AND
+ 00001111
+ 01011101
+ 
+ 00001101
+ 
+ 
+ Instructions
+ Registers A, X, R
+ Constant C
+ 
+ NOP (0x00)
+ 
+ MOV <a, x, r>, <x, c, [x], [c]>
+ MOV <[x], [c]>, <a, x, r, c>
+ MOV x, a
+ 
+ ADD a, <x, c, [x], [c]>
+ ADD x, <x, c>
+ ADD <[x], [c]>, a
+ 
+ ADC a, <x, c, [x], [c]>
+ ADC x, <x, c>
+ ADC <[x], [c]>, a
+ 
+ SUB a, <x, c, [x], [c]>
+ SUB x, <x, c>
+ SUB <[x], [c]>, a
+ 
+ SBC a, <x, c, [x], [c]>
+ SBC x, <x, c>
+ SBC <[x], [c]>, a
+ 
+ AND a, <x, c, [x], [c]>
+ AND x, <x, c>
+ 
+ OR  a, <x, c, [x], [c]>
+ OR  x, <x, c>
+ 
+ XOR a, <x, c, [x], [c]>
+ XOR x, <x, c>
+ 
+ INC <a, x>
+ DEC <a, x>
+ 
+ JMP <x, c>
+ Jcc <x, c>
+ 
+ CMP <a, x>, <x, c>
+ 
+ JSR <x, c>
+ RET
+ 
+ Aliases
+ CLC -> CMP X, X
+ SWP -> MOV A, X
+        MOV X, A
+ MOV X, X -> NOP
+ 
+ Conditions
+ C  carry
+ NC not carry
+ E  equal
+ NE not equal
+ G  greater than
+ GE greater than or equal to
+ L  less than
+ LE less than or equal to
+ 
+ 
+ 
+ 
+ 
+ 
+ 
