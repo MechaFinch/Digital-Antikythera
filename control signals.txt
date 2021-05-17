@@ -30,8 +30,14 @@
  Delay Write [X]
  001 10 10 0 00 xx  xx xx xx xxx  xxx0 xx x000
  
+ Delay Write [X], Read Constant
+ 101 10 10 0 01 10  xx xx xx xxx  xxx0 xx x000
+ 
  Delay Write [C]
  001 11 10 0 00 xx  xx xx xx xxx  xxx0 xx x000
+ 
+ Delay Write [C], Read Constant
+ 101 11 10 0 01 10  xx xx xx xxx  xxx0 xx x000
  
  Write [X]
  001 00 xx 0 10 01  xx xx xx xxx  xxx0 xx x000
@@ -54,7 +60,7 @@
  
  
  MOV A, constant
- 001 01 0x 0 00 xx                             < Read Constant
+ 001 01 00 0 00 xx                             < Read C
  101 00 xx 0 01 10  xx xx 11 xx1               < NOP
  100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx 0100
                     xx xx xx xxx  xxx0 xx x000
@@ -62,7 +68,7 @@
  
  
  MOV A, [X]
- 001 10 0x 0 00 xx                             < Read [X]
+ 001 10 00 0 00 xx                             < Read [X]
  001 00 xx 0 01 01  xx xx 11 xx1               < NOP
  100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx 0100
                     xx xx xx xxx  xxx0 xx x000
@@ -70,7 +76,7 @@
  
  
  MOV A, [constant]
- 101 11 0x 1 01 10                             < Read [C]
+ 101 11 00 1 01 10                             < Read [C]
  001 00 xx 0 01 11  xx xx 11 xx1               < NOP
  100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx 0100
                     xx xx xx xxx  xxx0 xx x000
@@ -78,8 +84,14 @@
  
  
  
+ MOV X, A
+ 100 xx xx 0 01 10
+                    xx xx 00 xx1
+		                  xxx0 xx 0010
+ 
+ 
  MOV X, constant
- 001 01 0x 0 00 xx                             < Read Constant
+ 001 01 00 0 00 xx                             < Read C
  101 00 xx 0 01 10  xx xx 11 xx1               < NOP
  100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx 0010
                     xx xx xx xxx  xxx0 xx x000
@@ -87,7 +99,7 @@
  
  
  MOV X, [X]
- 001 10 0x 0 00 xx                             < Read [X]
+ 001 10 00 0 00 xx                             < Read [X]
  001 00 xx 0 01 01  xx xx 11 xx1               < NOP
  100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx 0010
                     xx xx xx xxx  xxx0 xx x000
@@ -95,7 +107,7 @@
  
  
  MOV X, [constant]
- 101 11 0x 1 01 10                             < Read [C]
+ 101 11 00 1 01 10                             < Read [C]
  001 00 xx 0 01 11  xx xx 11 xx1               < NOP
  100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx 0010
                     xx xx xx xxx  xxx0 xx x000
@@ -110,7 +122,7 @@
  
  
  MOV R, constant
- 001 01 0x 0 00 xx                             < Read Constant
+ 001 01 00 0 00 xx                             < Read C
  101 00 xx 0 01 10  xx xx 11 xx1               < NOP
  100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx 0001
                     xx xx xx xxx  xxx0 xx x000
@@ -118,7 +130,7 @@
  
  
  MOV R, [X]
- 001 10 0x 0 00 xx                             < Read [X]
+ 001 10 00 0 00 xx                             < Read [X]
  001 00 xx 0 01 01  xx xx 11 xx1               < NOP
  100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx 0001
                     xx xx xx xxx  xxx0 xx x000
@@ -126,7 +138,7 @@
  
  
  MOV R, [constant]
- 101 11 0x 1 01 10                             < Read [C]
+ 101 11 00 1 01 10                             < Read [C]
  001 00 xx 0 01 11  xx xx 11 xx1               < NOP
  100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx 0001
                     xx xx xx xxx  xxx0 xx x000
@@ -142,6 +154,84 @@
                     xx xx xx xxx  xxx0 xx x000
                                   xxx0 xx x000
  
+ 
+ MOV [X], X
+ 001 10 11 0 00 xx                             < DWrite [X]
+ 001 10 10 0 00 xx  xx xx 01 xx1               < Write [X]
+ 001 00 xx 0 10 01  xx xx xx xxx  xxx0 xx 0000 < NOP
+ 100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx x000
+                    xx xx xx xxx  xxx0 xx x000
+                                  xxx0 xx x000
+ 
+ 
+ MOV [X], R
+ 001 10 11 0 00 xx                             < DWrite [X]
+ 001 10 10 0 00 xx  xx xx 10 xx1               < Write [X]
+ 001 00 xx 0 10 01  xx xx xx xxx  xxx0 xx 0000 < NOP
+ 100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx x000
+                    xx xx xx xxx  xxx0 xx x000
+		                  xxx0 xx x000
+ 
+ 
+ MOV [X], C
+ 001 10 01 0 00 xx                             < DWrite [X] RC
+ 101 10 10 0 01 10  xx xx 11 xx1               < Write [X]
+ 001 00 xx 0 10 01  xx xx xx xxx  xxx0 xx 0000 < NOP
+ 100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx x000
+                    xx xx xx xxx  xxx0 xx x000
+		                  xxx0 xx x000
+ 
+ 
+ 
+ MOV [C], A
+ 101 11 11 1 01 10                             < DWrite [C]
+ 001 11 10 0 00 xx  xx xx 00 xx1               < Write [C]
+ 001 00 xx 0 10 11  xx xx xx xxx  xxx0 xx 0000 < NOP
+ 100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx x000
+                    xx xx xx xxx  xxx0 xx x000
+		                  xxx0 xx x000
+ 
+ 
+ MOV [C], X
+ 101 11 11 1 01 10                             < DWrite [C]
+ 001 11 10 0 00 xx  xx xx 01 xx1               < Write [C]
+ 001 00 xx 0 10 11  xx xx xx xxx  xxx0 xx 0000 < NOP
+ 100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx x000
+                    xx xx xx xxx  xxx0 xx x000
+		                  xxx0 xx x000
+ 
+ 
+ MOV [C], R
+ 101 11 11 1 01 10                             < DWrite [C]
+ 001 11 10 0 00 xx  xx xx 10 xx1               < Write [C]
+ 001 00 xx 0 10 11  xx xx xx xxx  xxx0 xx 0000 < NOP
+ 100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx x000
+                    xx xx xx xxx  xxx0 xx x000
+		                  xxx0 xx x000
+ 
+ 
+ MOV [C], C
+ 101 11 01 1 01 10                             < DWrite [C] RC
+ 101 11 10 0 01 10  xx xx 11 xx1               < Write [C]
+ 001 00 xx 0 10 11  xx xx xx xxx  xxx0 xx 0000 < NOP
+ 100 xx xx 0 01 10  xx xx xx xxx  xxx0 xx x000
+                    xx xx xx xxx  xxx0 xx x000
+		                  xxx0 xx x000
+ 
+ 
+ 
+ ADD A, X
+ 100 xx xx 0 01 10
+                    00 01 xx 11x
+		                  0000 11 1100
+ 
+ 
+ ADD A, C
+ 001 01 00 0 00 xx                             < Read C
+ 101 00 xx 0 01 10  00 11 xx 11x               < NOP
+ 100 xx xx 0 01 10  xx xx xx xxx  0000 11 1100
+                    xx xx xx xxx  xxx0 xx x000
+		                  xxx0 xx x000
  
  
  
